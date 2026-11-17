@@ -92,16 +92,8 @@ DuckDuckGo voi rajoittaa automaattisia pyyntöjä tai muuttaa HTML-rakennetta. S
 - `PROMPTS.md` – vaiheistetut agenttipromptit.
 - `tests/test_search.py` – hakutulosten jäsentimen yksikkötestit.
 
-## Palautusta ennen täydennettävää
-
-- [ ] Lisää kaksi omaa kuvakaappausta: yksi vastaus ilman hakua ja yksi haun kanssa.
-- [ ] Lisää `PROMPTS.md`-tiedostoon omat havainnot opencode-agentin vastauksista.
-- [ ] Tee vähintään neljä aitoa, vaiheittaista Git-committia omassa työskentelyssäsi.
-- [ ] Täydennä alla oleva reflektio omien kokemustesi perusteella. Älä palauta hakasulkeissa olevia ohjeita.
-
-## Reflektio – täydennä omilla kokemuksillasi (200–400 sanaa)
-
-Kirjoita tähän 200–400 sanan reflektio omin sanoin. Käsittele kaikkia neljää kysymystä:
+Reflektio
+Tehtävä oli
 
 1. **Agentin virhe tai huono ratkaisu:** [Kuvaa konkreettinen tilanne, mitä agentti ehdotti, miten huomasit ongelman ja miten korjasit sen.]
 2. **Oma ymmärrys:** [Kerro, mikä koodin osa tuntuu vaikeimmalta ja miten aiot opetella sen.]
