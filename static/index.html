@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="fi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hakuchat – Nemotron</title>
+  <style>
+    :root { color-scheme: light dark; font-family: system-ui, sans-serif; }
+    body { margin: 0; background: Canvas; color: CanvasText; }
+    main { max-width: 850px; margin: 0 auto; padding: 24px 16px; }
+    h1 { margin-bottom: 4px; }
+    .hint { color: GrayText; margin-top: 0; }
+    #messages { min-height: 55vh; border: 1px solid GrayText; border-radius: 12px; padding: 16px; }
+    .message { margin: 0 0 16px; padding: 12px 14px; border-radius: 10px; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .user { background: color-mix(in srgb, Highlight 17%, Canvas); }
+    .assistant { background: color-mix(in srgb, GrayText 12%, Canvas); }
+    .search-note { color: GrayText; font-size: .9rem; margin: -8px 0 12px 12px; }
+    form { display: flex; gap: 8px; margin-top: 12px; }
+    input { flex: 1; min-width: 0; padding: 12px; border-radius: 8px; border: 1px solid GrayText; font: inherit; }
+    button { padding: 10px 18px; border: 0; border-radius: 8px; background: Highlight; color: HighlightText; font: inherit; cursor: pointer; }
+    button:disabled { opacity: .55; cursor: wait; }
+    a { color: LinkText; }
+    #status { min-height: 1.5em; color: GrayText; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Hakuchat</h1>
+  <p class="hint">Nemotron vastaa kysymyksiin ja hakee verkosta tarvittaessa.</p>
+  <section id="messages" aria-live="polite" aria-label="Keskustelu">
+    <p class="message assistant">Hei! Kysy mitä tahansa. Voin myös etsiä verkosta lähteitä ja linkkejä.</p>
+  </section>
+  <p id="status" role="status"></p>
+  <form id="chat-form">
+    <input id="prompt" type="text" maxlength="4000" placeholder="Kirjoita viesti..." autocomplete="off" required>
+    <button id="send" type="submit">Lähetä</button>
+  </form>
+</main>
+<script>
+(() => {
+  const messagesEl = document.getElementById("messages");
+  const form = document.getElementById("chat-form");
+  const input = document.getElementById("prompt");
+  const send = document.getElementById("send");
+  const status = document.getElementById("status");
+  const history = [];
+
+  // Lisää teksti turvallisesti DOM-solmuina ja tee URL-osoitteista klikattavia.
+  function addLinkedText(container, text) {
+    const urlPattern = /(https?:\/\/[^\s<>"')\]]+)/g;
+    let last = 0;
+    for (const match of text.matchAll(urlPattern)) {
+      container.append(document.createTextNode(text.slice(last, match.index)));
+      let url = match[0].replace(/[.,!?;:]+$/, "");
+      const link = document.createElement("a");
+      link.href = url;
+      link.textContent = url;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      container.append(link);
+      container.append(document.createTextNode(match[0].slice(url.length)));
+      last = match.index + match[0].length;
+    }
+    container.append(document.createTextNode(text.slice(last)));
+  }
+
+  function addMessage(role, content, searches = []) {
+    const bubble = document.createElement("div");
+    bubble.className = `message ${role}`;
+    addLinkedText(bubble, content);
+    messagesEl.append(bubble);
+    if (searches.length) {
+      const note = document.createElement("div");
+      note.className = "search-note";
+      note.textContent = "Verkkohaku: " + searches.join(", ");
+      messagesEl.append(note);
+    }
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const text = input.value.trim();
+    if (!text || send.disabled) return;
+
+    history.push({ role: "user", content: text });
+    addMessage("user", text);
+    input.value = "";
+    send.disabled = true;
+    status.textContent = "Nemotron käsittelee viestiä...";
+
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: history })
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Pyyntö epäonnistui.");
+      const answer = String(data.answer || "Tyhjä vastaus.");
+      history.push({ role: "assistant", content: answer });
+      addMessage("assistant", answer, Array.isArray(data.searches) ? data.searches : []);
+      status.textContent = "";
+    } catch (error) {
+      // Poista viimeinen käyttäjäviesti historiasta, jotta sitä voi yrittää uudelleen.
+      history.pop();
+      addMessage("assistant", "Virhe: " + error.message);
+      status.textContent = "Viestin lähetys epäonnistui.";
+    } finally {
+      send.disabled = false;
+      input.focus();
+    }
+  });
+})();
+</script>
+</body>
+</html>
