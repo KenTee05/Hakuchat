@@ -93,11 +93,13 @@ DuckDuckGo voi rajoittaa automaattisia pyyntöjä tai muuttaa HTML-rakennetta. S
 - `tests/test_search.py` – hakutulosten jäsentimen yksikkötestit.
 
 Reflektio
-Tehtävä oli
+Agentin virhe tai huono ratkaisu: [Kuvaa konkreettinen tilanne, mitä agentti ehdotti, miten huomasit ongelman ja miten korjasit sen.]
+Ongelma oli etten kotona saanut syistä ladattua pythonille uutta päivitystä terminaalissa. laitoin virhe tekstin ai:lle se ehdotti mitä piti tehdä mutta antoi koko ajan melkeinpä samaa korjaus tapaa joka ei toiminut eli käski asentaa uudelleen terminaalissa. Ongelman siis huomasin päivitystä ladattaessa ja korjasin tilanteen vaihtamalla kotiverkosta puhelimen mobiili verkko jakoon ja sitten toimi oikein
+Oma ymmärrys: [Kerro, mikä koodin osa tuntuu vaikeimmalta ja miten aiot opetella sen.]
+Omasta mielestäni searc ja chat core ovat vaikeimmat. Aion ainakin etsiä netistä tietoa ja pistämällä AI:lle koodin ja selittää kohta kohdalla miten osat toimi
+Oppiminen: [Vertaa agentin ohjaamista siihen, että olisit kirjoittanut koodin itse. Anna konkreettinen esimerkki.]vat ja miten ne yhdistyvät toisiiinsa.
+Agentin ohjaamana koodin rakentaminen on helpompaa mutta se pitää lukea läpi huolella mutaa kun itse kirjoittaa asia jää paremmin muistiin vaikka sekin pitää katsoa
+läpi virheitä varten
+Haun valinta: [Kuvaa, milloin malli haki ja milloin vastasi ilman hakua. Oliko valinta mielestäsi järkevä?]
+malli haki kun siltä kysyi hakemaan netistä kuin taas jos tiedosto oli olemassa tiedostossa se haki sen ja otti sieltä tiedot. Valinta on mielestäni melko järkevä.
 
-1. **Agentin virhe tai huono ratkaisu:** [Kuvaa konkreettinen tilanne, mitä agentti ehdotti, miten huomasit ongelman ja miten korjasit sen.]
-2. **Oma ymmärrys:** [Kerro, mikä koodin osa tuntuu vaikeimmalta ja miten aiot opetella sen.]
-3. **Oppiminen:** [Vertaa agentin ohjaamista siihen, että olisit kirjoittanut koodin itse. Anna konkreettinen esimerkki.]
-4. **Haun valinta:** [Kuvaa, milloin malli haki ja milloin vastasi ilman hakua. Oliko valinta mielestäsi järkevä?]
-
-Lisää reflektioon vain sellaisia havaintoja, jotka todella tapahtuivat, kun ajoit ja testasit sovelluksen.
